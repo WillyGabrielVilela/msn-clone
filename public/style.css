@@ -1,70 +1,70 @@
-* {
+  * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
+  }
 
-body {
+  body {
     display: flex;
     justify-content: center;
     align-items: center;
     font: 1em Arial, sans-serif;
-}
+  }
 
-h5 {
+  h5 {
     font-size: 1em;
     margin-left: 1.5em;
     margin-top: 0;
     padding: 0;
     font-weight: 500;
     line-height: 1.3em;
-}
-h6 {
+  }
+  h6 {
     font-size: 0.85em;
     margin-bottom: 0;
     margin-top: 0.85em;
     padding: 0;
     font-weight: 300;
-}
+  }
 
-p {
+  p {
     font-style: italic;
     color: #21c500;
     padding: 0.35em 0.35em;
     margin: 0.35em;
     margin-left: 0.7em;
     font-size: 0.85em;
-}
+  }
 
-.autocomplete {
+  .autocomplete {
     position: relative;
     display: inline-block;
   }
 
-.autocomplete-items {
+  .autocomplete-items {
     border: 1px solid #d4d4d4;
     border-bottom: none;
     border-top: none;
     z-index: 99;
     width: fit-content;
   }
-  
-.autocomplete-items div {
+
+  .autocomplete-items div {
     padding: 10px;
     cursor: pointer;
     border-bottom: 1px solid #d4d4d4; 
   }
-  
-.autocomplete-items div:hover {
+
+  .autocomplete-items div:hover {
     background-color: #e9e9e9; 
   }
 
-.leaveBtn {
+  .leaveBtn {
   display: flex;
   justify-self: flex-end;
-}
+  }
 
-.window {
+  .window {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -78,7 +78,7 @@ p {
     width: 500px;
   }
 
-.windowLogin {
+  .windowLogin {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -92,7 +92,7 @@ p {
     width: 300px;
   }
 
-.loginImg {
+  .loginImg {
     max-height: 150px;
     padding: 2em;
     margin: 2em;
@@ -100,42 +100,41 @@ p {
     border-radius: 2%;
   }
 
-.container {
+  .container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 95%;
     flex-direction: column;
-}
-  
-.top {
+  }
+
+  .top {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 90%;
     padding-top: 0;
     padding-bottom: 4px;
-}
+  }
 
-.topLogin {
+  .topLogin {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     width: 90%;
     padding-top: 0;
     padding-bottom: 4px;
-}
+  }
 
-.logo {
+  .logo {
     height: 100%;
     margin-bottom: 0;
     margin-left: 4px;
     width: 30px;
   }
     
-  /* Meddelande */
 
-.messageContainer { 
+  .messageContainer { 
     display: flex;
     height: 440px;
     width: 90%;
@@ -143,11 +142,10 @@ p {
     border: 1px solid #C4D5DF;
     background-color: #ffffff;
     overflow: auto;
-} 
+  } 
 
-/* Hela message containern */
 
-.sendMessage { 
+  .sendMessage { 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -156,25 +154,24 @@ p {
     margin: 0.7em;
     width: 90%;
     border: 1px solid #C4D5DF;
-} 
+  } 
 
-/* Skriva meddelande */
 
-#inputContainer {
+  #inputContainer {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0.2em;
     width: 100%;
-}
-#inputContainer input {
+  }
+  #inputContainer input {
     height: 40px;
     border: 0;
     padding: 0.5em;
     width: 100%;
     margin: 0.35em;
-}
-button {
+  }
+  button {
     cursor: pointer;
     width: fit-content;
     background: rgb(247,253,255);
@@ -184,28 +181,30 @@ button {
     font-size: 1em;
     padding: 0.4em;
     text-align: center;
-}
+  }
 
-#messages {
+  #messages {
     list-style-type: none;
     margin: 0;
     padding: 0;
-}
+  }
 
-#messages li {
+  #messages li {
     padding: 0;
     line-height: 0.7em;
     margin: 0.5em;
     padding-bottom: 0.7em;
     width: 100%;
-}
+  }
 
-#messages li:nth-child(odd) {
+  #messages li:nth-child(odd) {
     color: #0066ff; 
-}
+  }
 
-/* Emojis */
-.emojibutton {
+  
+
+  /* Emojis */
+  .emojibutton {
     background-color: Transparent;
     background-repeat:no-repeat;
     border: none;
@@ -215,212 +214,26 @@ button {
     font-size: 1.2em;
     padding-left: 0.2em;
     padding: 0.2em;
-}
+  }
 
-#emojiContainer {
+  #emojiContainer {
     height: 40px;
     display: flex;
     align-self: flex-start;
     padding-left: 1.5em;
     padding-top: 0.4em;
-}
+  }
 
-/* När användare skriver */
-#typingContainer {
+  #typingContainer {
     height: 20px;
     display: flex;
     align-self: flex-start;
     padding-left: 30px;
     margin-bottom: 0.2em
-}
+  }
 
-#isTyping {
+  #isTyping {
     font-style: italic;
     font-size: 0.85em;
     color: #7a7a7a;
-}
-
-
-@media screen and (max-width: 400px) {
-    .window {
-      min-width: 300px;
-    }
   }
-
-/* Nudge */
-.nudge-text {
-    display: none;
-  }
-  .nudge {
-    margin: 10px 0 20px 5px;
-    position: relative;
-  }
-  .nudge:after {
-    border-top: 1px solid black;
-    content: "";
-    left: 0;
-    position: absolute;
-    top: 25px;
-    width: 60px;
-  }
-
-.is-nudged {
-    animation-name: nudge;
-    animation-duration: 100ms;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite
-  }
-  @keyframes nudge {
-   2% {
-    transform:translate(-.5px, -1.5px) rotate(-.5deg)
-   }
-   4% {
-    transform:translate(2.5px, 2.5px) rotate(.5deg)
-   }
-   6% {
-    transform:translate(-1.5px, 1.5px) rotate(1deg)
-   }
-   8% {
-    transform:translate(.5px, -.5px) rotate(1deg)
-   }
-   10% {
-    transform:translate(2.5px, -.5px) rotate(1deg)
-   }
-   12% {
-    transform:translate(1.5px, -.5px) rotate(1deg)
-   }
-   14% {
-    transform:translate(-.5px, 2.5px) rotate(1deg)
-   }
-   16% {
-    transform:translate(-1.5px, .5px) rotate(1deg)
-   }
-   18% {
-    transform:translate(1.5px, 2.5px) rotate(-.5deg)
-   }
-   20% {
-    transform:translate(2.5px, .5px) rotate(.5deg)
-   }
-   22% {
-    transform:translate(-1.5px, -.5px) rotate(1deg)
-   }
-   24% {
-    transform:translate(-.5px, 2.5px) rotate(-.5deg)
-   }
-   26% {
-    transform:translate(1.5px, .5px) rotate(1deg)
-   }
-   28% {
-    transform:translate(-.5px, 1.5px) rotate(.5deg)
-   }
-   30% {
-    transform:translate(1.5px, -1.5px) rotate(.5deg)
-   }
-   32% {
-    transform:translate(1.5px, 2.5px) rotate(-.5deg)
-   }
-   34% {
-    transform:translate(.5px, .5px) rotate(.5deg)
-   }
-   36% {
-    transform:translate(-1.5px, 2.5px) rotate(.5deg)
-   }
-   38% {
-    transform:translate(-.5px, .5px) rotate(1deg)
-   }
-   40% {
-    transform:translate(.5px, -.5px) rotate(1deg)
-   }
-   42% {
-    transform:translate(.5px, -1.5px) rotate(-.5deg)
-   }
-   44% {
-    transform:translate(.5px, -.5px) rotate(-.5deg)
-   }
-   46% {
-    transform:translate(2.5px, .5px) rotate(1deg)
-   }
-   48% {
-    transform:translate(1.5px, -1.5px) rotate(.5deg)
-   }
-   50% {
-    transform:translate(1.5px, .5px) rotate(1deg)
-   }
-   52% {
-    transform:translate(-1.5px, -1.5px) rotate(-.5deg)
-   }
-   54% {
-    transform:translate(-.5px, -.5px) rotate(.5deg)
-   }
-   56% {
-    transform:translate(2.5px, 1.5px) rotate(-.5deg)
-   }
-   58% {
-    transform:translate(-1.5px, -1.5px) rotate(1deg)
-   }
-   60% {
-    transform:translate(-.5px, -1.5px) rotate(-.5deg)
-   }
-   62% {
-    transform:translate(2.5px, 2.5px) rotate(1deg)
-   }
-   64% {
-    transform:translate(-.5px, 2.5px) rotate(-.5deg)
-   }
-   66% {
-    transform:translate(2.5px, -.5px) rotate(1deg)
-   }
-   68% {
-    transform:translate(-1.5px, -1.5px) rotate(1deg)
-   }
-   70% {
-    transform:translate(1.5px, -.5px) rotate(-.5deg)
-   }
-   72% {
-    transform:translate(2.5px, 2.5px) rotate(-.5deg)
-   }
-   74% {
-    transform:translate(.5px, .5px) rotate(-.5deg)
-   }
-   76% {
-    transform:translate(.5px, -.5px) rotate(-.5deg)
-   }
-   78% {
-    transform:translate(-1.5px, -.5px) rotate(.5deg)
-   }
-   80% {
-    transform:translate(.5px, .5px) rotate(.5deg)
-   }
-   82% {
-    transform:translate(-1.5px, 2.5px) rotate(-.5deg)
-   }
-   84% {
-    transform:translate(-1.5px, 2.5px) rotate(.5deg)
-   }
-   86% {
-    transform:translate(2.5px, 2.5px) rotate(.5deg)
-   }
-   88% {
-    transform:translate(-.5px, 2.5px) rotate(.5deg)
-   }
-   90% {
-    transform:translate(-1.5px, 2.5px) rotate(1deg)
-   }
-   92% {
-    transform:translate(-1.5px, -1.5px) rotate(1deg)
-   }
-   94% {
-    transform:translate(.5px, 2.5px) rotate(1deg)
-   }
-   96% {
-    transform:translate(-1.5px, -.5px) rotate(1deg)
-   }
-   98% {
-    transform:translate(-1.5px, 2.5px) rotate(1deg)
-   }
-   0%,
-   100% {
-    transform:translate(0, 0) rotate(0)
-   }
-  }
-  
