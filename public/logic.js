@@ -60,6 +60,7 @@ socket.on('user-connected', userName => {
     let pItem = document.createElement("p")
     pItem.innerText = userName + " joined the chat"
     list.appendChild(pItem)
+    laudio.play()
     scrollDown()
 })
 
@@ -72,6 +73,7 @@ socket.on('user-disconnected', userName => {
     let pItem = document.createElement("p")
     pItem.innerText = userName + " left the chat"
     list.appendChild(pItem)
+    naudio.play()
     scrollDown()
 })
 
