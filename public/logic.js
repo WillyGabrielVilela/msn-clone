@@ -2,7 +2,6 @@ let socket = io()
 const typeInput = document.getElementById('message')
 const textInput = document.getElementById('messages')
 const isTyping = document.getElementById('isTyping')
-const jokeButton = document.querySelector(".getJokeBtn");
 const nudgeContainer = document.querySelector('#window');
 const nudgeButton = document.querySelector('#nudge-button');
 const messageScroll = document.querySelector(".messageContainer")
@@ -15,25 +14,6 @@ socket.emit('new-user', userName)
 window.onbeforeunload = function(e) {
   e.preventDefault();
 }
-
-async function handleClick() {
-    const { joke } = await getJoke();
-    const input = document.getElementById("message")
-      input.value = joke
-      
-      socket.emit('joke', { userName })
-  }
-
-
-async function getJoke() {
-    const response = await fetch("https://icanhazdadjoke.com", {
-        headers: {
-          Accept: "application/json",
-        },
-      });
-      const joke = await response.json();
-      return joke;
-    }
 
 function scrollDown(){
       messageScroll.scrollTop = messageScroll.scrollHeight;
@@ -211,6 +191,3 @@ function autocomplete(inp, arr) {
     }
   }
   
-  var jokeArray = ["/ 🤡"]
-  
-  autocomplete(document.getElementById("message"), jokeArray);
