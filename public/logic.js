@@ -6,6 +6,14 @@ const nudgeContainer = document.querySelector('#window');
 const nudgeButton = document.querySelector('#nudge-button');
 const messageScroll = document.querySelector(".messageContainer")
 
+const linkElement = document.createElement('link');
+linkElement.rel = 'stylesheet';
+linkElement.type = 'text/css';
+linkElement.href = '.style.css'; // Substitua pelo caminho real do seu arquivo CSS externo
+
+// Adiciona a tag link ao head do documento
+document.head.appendChild(linkElement);
+
 const { userName } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
@@ -25,10 +33,12 @@ socket.on('message', incoming => {
     isTyping.innerText = ""
     const list = document.getElementById("messages")
     let listItem = document.createElement("li")
-    listItem.innerHTML = '<h6>' + incoming.userName + " says: </h6>" + '<br/>' + '<h5>' + incoming.message + '</h5>'
+    let userNameColor = incoming.userName === userName ? '#0066ff' : '#000000'
+    listItem.innerHTML = '<h6 style="color: ' + userNameColor + '">' + incoming.userName + " says: </h6>" + '<br/>' + '<h5 style="color: ' + userNameColor + '">' + incoming.message + '</h5>'
     list.appendChild(listItem)
     scrollDown()
 })
+
 
 
 
