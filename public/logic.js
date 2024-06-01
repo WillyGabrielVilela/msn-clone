@@ -82,15 +82,16 @@ socket.on('user-disconnected', userName => {
 
 const mraudio = new Audio("assets/mrec.mp3");
 function sendMessage() {
-  const input = document.getElementById("message")
-  const message = input.value.trim()  // Remove espaços em branco no início e no fim
+    const input = document.getElementById("message")
+    const message = input.value.trim() 
     if (message === "") {
         alert("A mensagem não pode estar vazia ou conter apenas espaços em branco.");
         return;
     }
-  socket.emit('message', { userName, message })
-  mraudio.play();
-  scrollDown()
+    socket.emit('message', { userName, message })
+    input.value = ""
+    mraudio.play();
+    scrollDown()
 }
 
 
