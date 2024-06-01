@@ -26,7 +26,7 @@ socket.on('message', incoming => {
   const list = document.getElementById("messages")
   let listItem = document.createElement("li")
   let userNameColor = incoming.userName === userName ? '#0066ff' : '#000000'
-  listItem.innerHTML = '<h6 style="color: ' + userNameColor + '">' + incoming.userName + " says: </h6>" + '<br/>' + '<h5 style="color: ' + userNameColor + '">' + incoming.message + '</h5>'
+  listItem.innerHTML = '<h6 style="color: ' + userNameColor + '">' + incoming.userName + " disse: </h6>" + '<br/>' + '<h5 style="color: ' + userNameColor + '">' + incoming.message + '</h5>'
   list.appendChild(listItem)
   scrollDown()
 })
@@ -46,7 +46,7 @@ input.addEventListener("keyup", function (event) {
 
 
 socket.on('typing', incoming => {
-  isTyping.innerText = incoming.userName + ' is typing a message ...';
+  isTyping.innerText = incoming.userName + ' está digitando ...';
 })
 
 
@@ -60,7 +60,7 @@ var laudio = new Audio("assets/login.mp3");
 socket.on('user-connected', userName => {
   const list = document.getElementById("messages")
   let pItem = document.createElement("p")
-  pItem.innerText = userName + " joined the chat"
+  pItem.innerText = userName + " entrou no chat"
   list.appendChild(pItem)
   laudio.play()
   scrollDown()
@@ -73,7 +73,7 @@ socket.on('user-connected', userName => {
 socket.on('user-disconnected', userName => {
   const list = document.getElementById("messages")
   let pItem = document.createElement("p")
-  pItem.innerText = userName + " left the chat"
+  pItem.innerText = userName + " saiu do chat"
   list.appendChild(pItem)
   naudio.play()
   scrollDown()
@@ -138,7 +138,7 @@ nudgeButton.addEventListener('click', (e) => {
   socket.on('nudge', userName => {
     const list = document.getElementById("messages")
     let h6Item = document.createElement("h6")
-    h6Item.innerText = userName + " have just sent a nudge."
+    h6Item.innerText = userName + " acabei de enviar um lembrete."
     naudio.play();
     list.appendChild(h6Item)
     nudgeContainer.classList.add('is-nudged');
