@@ -26,7 +26,6 @@ socket.on('message', incoming => {
   const list = document.getElementById("messages");
   let listItem = document.createElement("li");
   let messageAlignment = incoming.userName === userName ? 'right' : 'left';
-  listItem.classList.add('message', messageAlignment); // Adiciona classes para alinhamento à mensagem
   let userNameColor = incoming.userName === userName ? '#0066ff' : '#000000';
   listItem.innerHTML = '<h6 style="color: ' + userNameColor + '">' + incoming.userName + " says: </h6>" + '<br/>' + '<h5 style="color: ' + userNameColor + '">' + incoming.message + '</h5>';
   list.appendChild(listItem);
@@ -128,6 +127,13 @@ function sendSad() {
 function sendAngry() {
   const input = document.getElementById("message")
   const message = "😡"
+  socket.emit('message', { userName, message })
+  mraudio.play();
+}
+
+function sendStranger() {
+  const input = document.getElementById("message")
+  const message = "😖"
   socket.emit('message', { userName, message })
   mraudio.play();
 }
