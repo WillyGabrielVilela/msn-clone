@@ -25,12 +25,13 @@ socket.on('message', incoming => {
   isTyping.innerText = "";
   const list = document.getElementById("messages");
   let listItem = document.createElement("li");
-  let messageAlignment = incoming.userName === userName ? 'right' : 'left';
-  let userNameColor = incoming.userName === userName ? '#0066ff' : '#000000';
-  listItem.innerHTML = '<h6 style="color: ' + userNameColor + '">' + incoming.userName + " says: </h6>" + '<br/>' + '<h5 style="color: ' + userNameColor + '">' + incoming.message + '</h5>';
+  let messageAlignment = incoming.userName === userName ? 'user' : 'other';
+  listItem.classList.add('message', messageAlignment);
+  listItem.innerHTML = '<h6>' + incoming.userName + " says: </h6>" + '<p>' + incoming.message + '</p>';
   list.appendChild(listItem);
   scrollDown();
 });
+
 
 
 
