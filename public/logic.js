@@ -29,6 +29,14 @@ socket.on('message', async incoming => {
   listItem.innerHTML = '<h6>' + incoming.userName + " says: </h6>" + '<p>' + incoming.message + '</p>';
   list.appendChild(listItem);
 
+  const cepInfo = await getCEPInfo(incoming.message);
+  if (cepInfo) {
+    // Criar um novo item na lista com as informações do endereço
+    let cepInfoItem = document.createElement("li");
+    cepInfoItem.innerHTML = `<h5>Informações do endereço:</h5><p>Logradouro: ${cepInfo.logradouro}</p><p>Bairro: ${cepInfo.bairro}</p><p>Cidade: ${cepInfo.localidade}</p><p>Estado: ${cepInfo.uf}</p>`;
+    list.appendChild(cepInfoItem);
+  }
+  
   if (incoming.message.toLowerCase() === "imagem gato") {
     const catImage = await getCatImage();
     let imageItem = document.createElement("li");
@@ -51,6 +59,14 @@ socket.on('message', async incoming => {
     
   }
 
+  if (incoming.message.toLowerCase().includes("cep")) {
+    const viaCep = await getCEPInfo();
+    let cepViaCep = document.createElement("li");
+    cepViaCep.innerHTML = `<p> ${viaCep}</p>`;
+    list.appendChild(cepViaCep);
+    
+  }
+
   scrollDown();
 });
 
@@ -64,6 +80,29 @@ async function getJoke() {
   const response = await fetch('https://8bfeb23f-c3ec-4314-9deb-0ac1f7b4e0f0-00-1lpf73kobfx7j.kirk.replit.dev:3000/teste1');
   const data = await response.json();
   return data.joke;
+}
+
+async function getCEPInfo(message) {
+  // Expressão regular para encontrar um CEP no formato "00000-000"
+  const cepRegex = /\b\d{5}-?\d{3}\b/;
+  // Extrair o CEP da mensagem
+  const cepMatch = message.match(cepRegex);
+  // Verificar se um CEP foi encontrado na mensagem
+  if (cepMatch) {
+    const cep = cepMatch[0]; // Pegar o primeiro CEP encontrado
+    try {
+      // Enviar uma requisição para a sua API local para obter as informações do endereço com base no CEP
+      const response = await fetch(`https://0c3644ad-f153-42a8-91f9-e9f8ed9ccb2f-00-1kqn5sle2hll5.picard.replit.dev/endereco/${cep}`);
+      const data = await response.json();
+      // Retornar as informações do endereço
+      return data;
+    } catch (error) {
+      console.error('Erro ao obter informações do CEP:', error);
+      return null;
+    }
+  } else {
+    return null; // Se nenhum CEP for encontrado na mensagem, retornar null
+  }
 }
 
 async function getDogImage() {
