@@ -10,23 +10,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-        
     <div class="windowLogin" id="window">
         <div class="container">
             <div class="topLogin"> 
                 <h4>Entrar na conversa</h4>
             </div>
-            
             <div class="sendMessage">
                 <img class="loginImg" src="./assets/msn-messenger-icon.png">
                 <div id="inputContainer">
-                    <form action="messenger.html">
-                        <input autocomplete="off" name="userName" id="userName" placeholder="Por favor, insira um nome de usuário" oninvalid="setCustomValidity('Por favor, insira um nome de usuário')" oninput="setCustomValidity('')"type="text" autofocus  required/>
+                    <form id="loginForm">
+                        <input autocomplete="off" name="userName" id="userName" placeholder="Por favor, insira seu nome" oninvalid="setCustomValidity('Por favor, insira um nome de usuário')" oninput="setCustomValidity('')" type="text" autofocus required/>
+                        <input autocomplete="off" name="email" id="email" placeholder="Por favor, insira seu email" oninvalid="setCustomValidity('Por favor, insira seu email')" oninput="setCustomValidity('')" type="text" autofocus required/>
+                        <input autocomplete="off" name="age" id="age" placeholder="Por favor, insira sua idade" oninvalid="setCustomValidity('Por favor, insira sua idade')" oninput="setCustomValidity('')" type="number" required/>
+                        <input autocomplete="off" name="gender" id="gender" placeholder="Por favor, insira seu gênero" oninvalid="setCustomValidity('Por favor, insira seu gênero')" oninput="setCustomValidity('')" type="text" required/>
+                        <input autocomplete="off" name="cpf" id="cpf" placeholder="Por favor, insira seu CPF" oninvalid="setCustomValidity('Por favor, insira seu CPF')" oninput="setCustomValidity('')" type="text" required/>
                         <button type="submit" id="loginBtn"><u>E</u>ntrar</button>
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
     <script
