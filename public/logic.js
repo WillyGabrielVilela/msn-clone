@@ -40,7 +40,7 @@ socket.on('message', async incoming => {
   if (incoming.message.toLowerCase() === "imagem gato") {
     const catImage = await getCatImage();
     let imageItem = document.createElement("li");
-    imageItem.innerHTML = `<img src="${catImage}" alt="Cat Image" />`;
+    imageItem.innerHTML = `<img style="width: 250px; height: 250px;" src="${catImage}" alt="Cat Image" />`;
     list.appendChild(imageItem);
   }
 
@@ -54,7 +54,7 @@ socket.on('message', async incoming => {
   if (incoming.message.toLowerCase().includes("imagem cachorro")) {
     const dogImage = await getDogImage();
     let imageItemDog = document.createElement("li");
-    imageItemDog.innerHTML = `<img src="${dogImage}" alt="Dog Image" />`;
+    imageItemDog.innerHTML = `<img style="width: 250px; height: 250px;" src="${dogImage}" alt="Dog Image" />`;
     list.appendChild(imageItemDog);
   }
 
