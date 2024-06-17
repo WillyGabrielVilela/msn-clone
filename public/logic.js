@@ -1,16 +1,16 @@
 let socket = io();
-const typeInput = document.getElementById('message');
-const textInput = document.getElementById('messages');
-const isTyping = document.getElementById('isTyping');
+const typeInput = document.getElementById("message");
+const textInput = document.getElementById("messages");
+const isTyping = document.getElementById("isTyping");
 const jokeButton = document.querySelector(".getJokeBtn");
-const nudgeContainer = document.querySelector('#window');
-const nudgeButton = document.querySelector('#nudge-button');
+const nudgeContainer = document.querySelector("#window");
+const nudgeButton = document.querySelector("#nudge-button");
 const messageScroll = document.querySelector(".messageContainer");
 
 const { userName } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
-socket.emit('new-user', userName);
+socket.emit("new-user", userName);
 
 window.onbeforeunload = function (e) {
   e.preventDefault();
@@ -20,19 +20,33 @@ function scrollDown() {
   messageScroll.scrollTop = messageScroll.scrollHeight;
 }
 
-socket.on('message', async incoming => {
+socket.on("message", async (incoming) => {
   isTyping.innerText = "";
   const list = document.getElementById("messages");
   let listItem = document.createElement("li");
-  let messageAlignment = incoming.userName === userName ? 'user' : 'other';
-  listItem.classList.add('message', messageAlignment);
-  listItem.innerHTML = '<h6>' + incoming.userName + " says: </h6>" + '<p>' + incoming.message + '</p>';
+  let messageAlignment = incoming.userName === userName ? "user" : "other";
+  listItem.classList.add("message", messageAlignment);
+  listItem.innerHTML =
+    "<h6>" +
+    incoming.userName +
+    " says: </h6>" +
+    "<p>" +
+    incoming.message +
+    "</p>";
   list.appendChild(listItem);
+
+  const cepInfo = await getCEPInfo(incoming.message);
+  if (cepInfo) {
+    // Criar um novo item na lista com as informações do endereço
+    let cepInfoItem = document.createElement("li");
+    cepInfoItem.innerHTML = `<h5>Informações do endereço:</h5><p>Logradouro: ${cepInfo.logradouro}</p><p>Bairro: ${cepInfo.bairro}</p><p>Cidade: ${cepInfo.localidade}</p><p>Estado: ${cepInfo.uf}</p>`;
+    list.appendChild(cepInfoItem);
+  }
 
   if (incoming.message.toLowerCase() === "imagem gato") {
     const catImage = await getCatImage();
     let imageItem = document.createElement("li");
-    imageItem.innerHTML = `<img src="${catImage}" alt="Cat Image" />`;
+    imageItem.innerHTML = `<img style="width: 250px; height: 250px;" src="${catImage}" alt="Cat Image" />`;
     list.appendChild(imageItem);
   }
 
@@ -46,7 +60,7 @@ socket.on('message', async incoming => {
   if (incoming.message.toLowerCase().includes("imagem cachorro")) {
     const dogImage = await getDogImage();
     let imageItemDog = document.createElement("li");
-    imageItemDog.innerHTML = `<img src="${dogImage}" alt="Dog Image" />`;
+    imageItemDog.innerHTML = `<img style="width: 250px; height: 250px;" src="${dogImage}" alt="Dog Image" />`;
     list.appendChild(imageItemDog);
   }
 
@@ -57,39 +71,183 @@ socket.on('message', async incoming => {
     list.appendChild(chatGptConsulta);
   }
 
+  if (incoming.message.toLowerCase().includes("cep")) {
+    const viaCep = await getCEPInfo();
+    let cepViaCep = document.createElement("li");
+    cepViaCep.innerHTML = `<p> ${viaCep}</p>`;
+    list.appendChild(cepViaCep);
+  }
+
+  // Verificar se a mensagem é para consultar usuários
+  if (incoming.message.toLowerCase() === "consultar usuarios") {
+    const consultaUsers = await listarUsuarios();
+    let usersConsultaUsers = document.createElement("li");
+    usersConsultaUsers.innerHTML = `<p> ${JSON.stringify(consultaUsers)}</p>`;
+    list.appendChild(usersConsultaUsers);
+    scrollDown(); // Role a tela para baixo após adicionar os usuários
+  }
+
+  // Verificar se a mensagem é para cadastrar usuário
+  if (incoming.message.toLowerCase() === "cadastrar usuario") {
+    displayUserForm(); // Exibir formulário para cadastrar usuário
+  }
+
   scrollDown();
 });
 
 async function getCatImage() {
-  const response = await fetch('https://8bfeb23f-c3ec-4314-9deb-0ac1f7b4e0f0-00-1lpf73kobfx7j.kirk.replit.dev/cat');
+  const response = await fetch(
+    "https://8bfeb23f-c3ec-4314-9deb-0ac1f7b4e0f0-00-1lpf73kobfx7j.kirk.replit.dev/cat",
+  );
   const data = await response.json();
   return data.imageUrl;
 }
 
 async function getJoke() {
-  const response = await fetch('https://8bfeb23f-c3ec-4314-9deb-0ac1f7b4e0f0-00-1lpf73kobfx7j.kirk.replit.dev:3000/teste1');
+  const response = await fetch(
+    "https://8bfeb23f-c3ec-4314-9deb-0ac1f7b4e0f0-00-1lpf73kobfx7j.kirk.replit.dev:3000/teste1",
+  );
   const data = await response.json();
   return data.joke;
 }
 
+async function getCEPInfo(message) {
+  // Expressão regular para encontrar um CEP no formato "00000-000"
+  const cepRegex = /\b\d{5}-?\d{3}\b/;
+  // Extrair o CEP da mensagem
+  const cepMatch = message.match(cepRegex);
+  // Verificar se um CEP foi encontrado na mensagem
+  if (cepMatch) {
+    const cep = cepMatch[0]; // Pegar o primeiro CEP encontrado
+    try {
+      // Enviar uma requisição para a sua API local para obter as informações do endereço com base no CEP
+      const response = await fetch(
+        `https://0c3644ad-f153-42a8-91f9-e9f8ed9ccb2f-00-1kqn5sle2hll5.picard.replit.dev/endereco/${cep}`,
+      );
+      const data = await response.json();
+      // Retornar as informações do endereço
+      return data;
+    } catch (error) {
+      console.error("Erro ao obter informações do CEP:", error);
+      return null;
+    }
+  } else {
+    return null; // Se nenhum CEP for encontrado na mensagem, retornar null
+  }
+}
+
 async function getDogImage() {
-  const response = await fetch('https://dog.ceo/api/breeds/image/random');
+  const response = await fetch("https://dog.ceo/api/breeds/image/random");
   const data = await response.json();
   return data.message;
 }
 
 async function postChatGpt(userMessage) {
-  const response = await fetch('https://8bfeb23f-c3ec-4314-9deb-0ac1f7b4e0f0-00-1lpf73kobfx7j.kirk.replit.dev:3003/testechatgpt', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await fetch(
+    "https://8bfeb23f-c3ec-4314-9deb-0ac1f7b4e0f0-00-1lpf73kobfx7j.kirk.replit.dev:3003/testechatgpt",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: userMessage }),
     },
-    body: JSON.stringify({ message: userMessage }),
-  });
+  );
   const data = await response.json();
   return data.message;
 }
 
+// Rota para listar usuários
+async function listarUsuarios() {
+  try {
+    const response = await fetch(
+      "https://3e7bb76d-600e-44b1-91e9-bacebca137d9-00-3nm0aozuqaj1r.kirk.replit.dev/users",
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erro ao obter lista de usuários:", error);
+    return [];
+  }
+}
+
+// Função para exibir formulário de cadastro de usuário
+function displayUserForm() {
+  const list = document.getElementById("messages");
+
+  // Criar formulário
+  let formItem = document.createElement("li");
+  formItem.innerHTML = `
+    <form id="userForm">
+      <label for="userName">Username:</label><br>
+      <input type="text" id="userName" name="userName" required><br>
+      <label for="age">Age:</label><br>
+      <input type="number" id="age" name="age" required><br>
+      <label for="cpf">CPF:</label><br>
+      <input type="text" id="cpf" name="cpf" required><br>
+      <label for="email">Email:</label><br>
+      <input type="email" id="email" name="email" required><br>
+      <label for="gender">Gender:</label><br>
+      <input type="text" id="gender" name="gender" required><br><br>
+      <input type="submit" value="Submit">
+    </form>
+  `;
+
+  list.appendChild(formItem);
+  scrollDown();
+
+  // Adicionar evento de submit ao formulário
+  const userForm = document.getElementById("userForm");
+  userForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(userForm);
+    const userData = {};
+    formData.forEach((value, key) => {
+      userData[key] = value;
+    });
+
+    try {
+      await incluirUsuario(userData);
+      // Limpar formulário
+      userForm.reset();
+
+      // Mostrar mensagem de sucesso
+      let successMessage = document.createElement("li");
+      successMessage.innerText = "Usuário incluído com sucesso!";
+      list.appendChild(successMessage);
+      scrollDown();
+    } catch (error) {
+      console.error("Erro ao incluir usuário:", error);
+      // Mostrar mensagem de erro
+          scrollDown();
+    }
+  });
+}
+
+
+// Função para enviar dados do usuário via POST
+async function incluirUsuario(userData) {
+  try {
+    const response = await fetch(
+      "https://3e7bb76d-600e-44b1-91e9-bacebca137d9-00-3nm0aozuqaj1r.kirk.replit.dev/users",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      },
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Erro ao incluir usuário:", error);
+    throw error;
+  }
+}
+
+// Evento para enviar mensagem ao pressionar Enter
 var input = document.getElementById("message");
 input.addEventListener("keyup", function (event) {
   if (event.keyCode === 13) {
@@ -98,16 +256,17 @@ input.addEventListener("keyup", function (event) {
   }
 });
 
-socket.on('typing', incoming => {
-  isTyping.innerText = incoming.userName + ' está digitando ...';
+// Evento para emitir evento de "typing" ao digitar
+socket.on("typing", (incoming) => {
+  isTyping.innerText = incoming.userName + " está digitando ...";
 });
 
-typeInput.addEventListener('keypress', function () {
-  socket.emit('typing', { userName });
+typeInput.addEventListener("keypress", function () {
+  socket.emit("typing", { userName });
 });
 
 var laudio = new Audio("assets/login.mp3");
-socket.on('user-connected', userName => {
+socket.on("user-connected", (userName) => {
   const list = document.getElementById("messages");
   let pItem = document.createElement("p");
   pItem.innerText = userName + " entrou no chat";
@@ -116,7 +275,7 @@ socket.on('user-connected', userName => {
   scrollDown();
 });
 
-socket.on('user-disconnected', userName => {
+socket.on("user-disconnected", (userName) => {
   const list = document.getElementById("messages");
   let pItem = document.createElement("p");
   pItem.innerText = userName + " saiu do chat";
@@ -126,6 +285,8 @@ socket.on('user-disconnected', userName => {
 });
 
 const mraudio = new Audio("assets/mrec.mp3");
+
+// Funções para enviar emojis específicos
 function sendMessage() {
   const input = document.getElementById("message");
   const message = input.value.trim();
@@ -133,79 +294,81 @@ function sendMessage() {
     alert("A mensagem não pode estar vazia ou conter apenas espaços em branco.");
     return;
   }
-  socket.emit('message', { userName, message });
+  socket.emit("message", { userName, message });
   input.value = "";
   mraudio.play();
   scrollDown();
 }
 
 function sendSmile() {
-  const input = document.getElementById("message");
   const message = "😊";
-  socket.emit('message', { userName, message });
+  socket.emit("message", { userName, message });
   mraudio.play();
 }
 
 function sendFlirt() {
-  const input = document.getElementById("message");
   const message = "😉";
-  socket.emit('message', { userName, message });
+  socket.emit("message", { userName, message });
   mraudio.play();
 }
 
 function sendLol() {
-  const input = document.getElementById("message");
   const message = "😃";
-  socket.emit('message', { userName, message });
+  socket.emit("message", { userName, message });
   mraudio.play();
 }
 
 function sendSad() {
-  const input = document.getElementById("message");
   const message = "🙁";
-  socket.emit('message', { userName, message });
+  socket.emit("message", { userName, message });
   mraudio.play();
 }
 
 function sendAngry() {
-  const input = document.getElementById("message");
   const message = "😡";
-  socket.emit('message', { userName, message });
+  socket.emit("message", { userName, message });
   mraudio.play();
 }
 
 function sendStranger() {
-  const input = document.getElementById("message");
   const message = "😖";
-  socket.emit('message', { userName, message });
+  socket.emit("message", { userName, message });
   mraudio.play();
 }
 
-var naudio = new Audio('assets/nudge.mp3');
-nudgeButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  socket.emit('nudge', userName);
+var naudio = new Audio("assets/nudge.mp3");
 
-  socket.on('nudge', userName => {
+// Evento para enviar nudge (lembrete)
+nudgeButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  socket.emit("nudge", userName);
+
+  socket.on("nudge", (userName) => {
     const list = document.getElementById("messages");
     let h6Item = document.createElement("h6");
     h6Item.innerText = userName + " acabei de enviar um lembrete.";
     naudio.play();
     list.appendChild(h6Item);
-    nudgeContainer.classList.add('is-nudged');
+    nudgeContainer.classList.add("is-nudged");
     scrollDown();
-    setTimeout(() => nudgeContainer.classList.remove('is-nudged'), 200);
+    setTimeout(() => nudgeContainer.classList.remove("is-nudged"), 200);
   });
 });
 
+// Função de autocomplete (ainda com apenas uma piada como exemplo)
 function autocomplete(inp, arr) {
   var currentFocus;
 
   inp.addEventListener("input", function (e) {
-    var autocompleteContainer, matchingElement, i, val = this.value;
+    var autocompleteContainer,
+      matchingElement,
+      i,
+      val = this.value;
 
     closeAllLists();
-    if (!val) { return false; }
+    if (!val) {
+      return false;
+    }
     currentFocus = -1;
 
     autocompleteContainer = document.createElement("div");
@@ -218,7 +381,8 @@ function autocomplete(inp, arr) {
         matchingElement = document.createElement("div");
 
         matchingElement.innerHTML += arr[i].substr(val.length);
-        matchingElement.innerHTML += "<input type='hidden' value='" + "1" + arr[i] + "'>";
+        matchingElement.innerHTML +=
+          "<input type='hidden' value='" + "1" + arr[i] + "'>";
 
         matchingElement.addEventListener("click", function (e) {
           handleClick();
