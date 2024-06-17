@@ -7,6 +7,19 @@ const nudgeContainer = document.querySelector('#window');
 const nudgeButton = document.querySelector('#nudge-button');
 const messageScroll = document.querySelector(".messageContainer");
 
+socket.on('user-disconnected', userName => {
+  const list = document.getElementById("messages");
+  let pItem = document.createElement("p");
+  pItem.innerText = userName + " saiu do chat";
+  list.appendChild(pItem);
+  naudio.play();
+  scrollDown();
+
+  // Redirecionar para a tela de login
+  window.location.href = '/';
+});
+
+
 const { userName } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
