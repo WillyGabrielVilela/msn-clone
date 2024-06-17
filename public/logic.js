@@ -1,4 +1,4 @@
-let socket = io()
+let socket = io();
 const typeInput = document.getElementById('message');
 const textInput = document.getElementById('messages');
 const isTyping = document.getElementById('isTyping');
@@ -56,7 +56,13 @@ socket.on('message', async incoming => {
     let imageItemDog = document.createElement("li");
     imageItemDog.innerHTML = `<img src="${dogImage}" alt="Dog Image" />`;
     list.appendChild(imageItemDog);
-    
+  }
+
+  if (incoming.message.toLowerCase().startsWith("chatgpt")) {
+    const chatgptResponse = await postChatGpt(incoming.message);
+    let chatGptConsulta = document.createElement("li");
+    chatGptConsulta.innerHTML = `<h5>${chatgptResponse}</h5>`;
+    list.appendChild(chatGptConsulta);
   }
 
   if (incoming.message.toLowerCase().includes("cep")) {
@@ -106,9 +112,21 @@ async function getCEPInfo(message) {
 }
 
 async function getDogImage() {
-  const response = await fetch('https://dog.ceo/api/breeds/image/random'); // URL da API de cachorro
+  const response = await fetch('https://dog.ceo/api/breeds/image/random');
   const data = await response.json();
-  return data.message; // URL da imagem do cachorro
+  return data.message;
+}
+
+async function postChatGpt(userMessage) {
+  const response = await fetch('https://8bfeb23f-c3ec-4314-9deb-0ac1f7b4e0f0-00-1lpf73kobfx7j.kirk.replit.dev:3003/testechatgpt', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ message: userMessage }),
+  });
+  const data = await response.json();
+  return data.message;
 }
 
 var input = document.getElementById("message");
@@ -124,7 +142,7 @@ socket.on('typing', incoming => {
 });
 
 typeInput.addEventListener('keypress', function () {
-  socket.emit('typing', { userName, message });
+  socket.emit('typing', { userName });
 });
 
 var laudio = new Audio("assets/login.mp3");
@@ -253,7 +271,6 @@ function autocomplete(inp, arr) {
   inp.addEventListener("keydown", function (e) {
     var x = document.getElementById(this.id + "autocomplete-list");
     if (x) x = x.getElementsByTagName("div");
-
   });
 
   function closeAllLists(elmnt) {
@@ -268,4 +285,3 @@ function autocomplete(inp, arr) {
 
 var jokeArray = ["/ 🤡"];
 autocomplete(document.getElementById("message"), jokeArray);
-a
